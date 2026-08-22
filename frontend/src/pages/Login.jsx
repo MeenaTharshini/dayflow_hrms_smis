@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginEmployee } from "../services/authService";
+import { supabase } from "../services/supabase";
 import "./Auth.css";
 
 function Login() {
@@ -8,17 +9,22 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setError("");
 
-    if (!email.trim() || !password) {
+    const loginEmail = email.trim().toLowerCase();
+
+    // ============================================
+    // VALIDATION
+    // ============================================
+
+    if (!loginEmail || !password) {
       setError("Please enter your email and password.");
       return;
     }
@@ -26,47 +32,124 @@ function Login() {
     setLoading(true);
 
     try {
-      const result = await loginEmployee(
-        email.trim(),
-        password
+      // ============================================
+      // FIND EMPLOYEE
+      // ============================================
+
+      const { data: employee, error: employeeError } =
+        await supabase
+          .from("employees")
+          .select(`
+            id,
+            employee_id,
+            full_name,
+            email,
+            phone,
+            department,
+            designation,
+            joining_date,
+            employment_type,
+            monthly_salary,
+            reporting_manager,
+            employment_status,
+            address,
+            emergency_contact_name,
+            emergency_contact_phone,
+            created_at,
+            updated_at,
+            login_password
+          `)
+          .eq("email", loginEmail)
+          .maybeSingle();
+
+      if (employeeError) {
+        throw employeeError;
+      }
+
+      // ============================================
+      // EMPLOYEE NOT FOUND
+      // ============================================
+
+      if (!employee) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      // ============================================
+      // CHECK PASSWORD
+      // ============================================
+
+      if (
+        !employee.login_password ||
+        employee.login_password !== password
+      ) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      // ============================================
+      // CHECK EMPLOYMENT STATUS
+      // ============================================
+
+      if (
+        employee.employment_status !== "Active"
+      ) {
+        setError(
+          `Your employee account is currently ${employee.employment_status}. Please contact the administrator.`
+        );
+        return;
+      }
+
+      // ============================================
+      // STORE LOGGED-IN EMPLOYEE
+      // ============================================
+
+      const employeeSession = {
+        id: employee.id,
+        employee_id: employee.employee_id,
+        full_name: employee.full_name,
+        email: employee.email,
+        phone: employee.phone,
+        department: employee.department,
+        designation: employee.designation,
+        joining_date: employee.joining_date,
+        employment_type: employee.employment_type,
+        monthly_salary: employee.monthly_salary,
+        reporting_manager: employee.reporting_manager,
+        employment_status: employee.employment_status,
+        address: employee.address,
+        emergency_contact_name:
+          employee.emergency_contact_name,
+        emergency_contact_phone:
+          employee.emergency_contact_phone,
+      };
+
+      sessionStorage.setItem(
+        "employee",
+        JSON.stringify(employeeSession)
       );
 
-      /*
-       * Save user information locally.
-       * Supabase itself manages the authentication session.
-       */
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(result.user)
+      sessionStorage.setItem(
+        "employeeLoggedIn",
+        "true"
       );
 
-      localStorage.setItem(
-        "profile",
-        JSON.stringify(result.profile)
-      );
-
-      /*
-       * Employee → Employee Dashboard
-       */
+      // ============================================
+      // GO TO EMPLOYEE DASHBOARD
+      // ============================================
 
       navigate("/employee-dashboard");
 
     } catch (err) {
-      console.error("Employee login error:", err);
+      console.error(
+        "Employee login error:",
+        err
+      );
 
-      if (
-        err.message?.toLowerCase().includes("email not confirmed")
-      ) {
-        setError(
-          "Your email has not been confirmed. Please check your email."
-        );
-      } else {
-        setError(
-          err.message ||
-          "Unable to sign in. Please check your credentials."
-        );
-      }
+      setError(
+        err?.message ||
+          "Unable to login. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -77,18 +160,9 @@ function Login() {
 
       <div className="auth-card">
 
-        {/* Back */}
-
-        <button
-          type="button"
-          className="back-button"
-          onClick={() => navigate("/")}
-        >
-          ← Back
-        </button>
-
-
-        {/* Header */}
+        {/* ========================================
+            HEADER
+        ======================================== */}
 
         <div className="auth-header">
 
@@ -97,13 +171,14 @@ function Login() {
           <p>Employee Login</p>
 
           <span>
-            Sign in to access your DaYFlow workspace.
+            Login to access your employee dashboard.
           </span>
 
         </div>
 
-
-        {/* Error */}
+        {/* ========================================
+            ERROR
+        ======================================== */}
 
         {error && (
           <div className="error-message">
@@ -111,29 +186,30 @@ function Login() {
           </div>
         )}
 
-
-        {/* Login Form */}
+        {/* ========================================
+            LOGIN FORM
+        ======================================== */}
 
         <form
           className="auth-form"
-          onSubmit={handleLogin}
+          onSubmit={handleSubmit}
         >
 
-          {/* Email */}
+          {/* EMAIL */}
 
           <div className="form-group">
 
-            <label htmlFor="loginEmail">
-              Employee Email
+            <label htmlFor="email">
+              Official Email
             </label>
 
             <input
-              id="loginEmail"
+              id="email"
               type="email"
-              placeholder="Enter your registered email"
+              placeholder="employee@company.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
+              onChange={(event) => {
+                setEmail(event.target.value);
                 setError("");
               }}
               autoComplete="email"
@@ -142,66 +218,30 @@ function Login() {
 
           </div>
 
-
-          {/* Password */}
+          {/* PASSWORD */}
 
           <div className="form-group">
 
-            <label htmlFor="loginPassword">
+            <label htmlFor="password">
               Password
             </label>
 
-            <div className="password-wrapper">
-
-              <input
-                id="loginPassword"
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
-                autoComplete="current-password"
-                required
-              />
-
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() =>
-                  setShowPassword(
-                    (value) => !value
-                  )
-                }
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-
-            </div>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setError("");
+              }}
+              autoComplete="current-password"
+              required
+            />
 
           </div>
 
-
-          {/* Forgot Password */}
-
-          <div className="forgot-password">
-
-            <button
-              type="button"
-              className="link-button"
-            >
-              Forgot Password?
-            </button>
-
-          </div>
-
-
-          {/* Submit */}
+          {/* LOGIN */}
 
           <button
             type="submit"
@@ -210,40 +250,31 @@ function Login() {
           >
             {loading
               ? "Signing In..."
-              : "Employee Sign In"}
+              : "Login"}
           </button>
 
         </form>
 
+        {/* ========================================
+            ADMIN LOGIN
+        ======================================== */}
 
-        {/* Footer */}
+        <div
+          style={{
+            marginTop: "20px",
+            textAlign: "center",
+          }}
+        >
 
-        <div className="auth-footer">
-
-          <p>
-            Don't have an employee account?
-          </p>
-
-          <p>
-            Please contact your administrator
-            to create your employee account.
-          </p>
-
-          <p>
-
-            Administrator?{" "}
-
-            <button
-              type="button"
-              className="link-button"
-              onClick={() =>
-                navigate("/admin-login")
-              }
-            >
-              Admin Login
-            </button>
-
-          </p>
+          <button
+            type="button"
+            className="back-button"
+            onClick={() =>
+              navigate("/admin-login")
+            }
+          >
+            Administrator Login
+          </button>
 
         </div>
 

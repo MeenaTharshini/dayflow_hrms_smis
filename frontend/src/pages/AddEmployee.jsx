@@ -12,6 +12,7 @@ function AddEmployee() {
     fullName: "",
     email: "",
     phone: "",
+
     department: "",
     designation: "",
     joiningDate: "",
@@ -19,9 +20,13 @@ function AddEmployee() {
     monthlySalary: "",
     reportingManager: "",
     employmentStatus: "Active",
+
     address: "",
     emergencyContactName: "",
     emergencyContactPhone: "",
+
+    loginPassword: "",
+    confirmPassword: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,20 +51,44 @@ function AddEmployee() {
     setError("");
     setMessage("");
 
-    // Required fields
+    // ============================================
+    // REQUIRED FIELDS
+    // ============================================
+
     if (
       !form.employeeId.trim() ||
       !form.fullName.trim() ||
       !form.email.trim() ||
       !form.department ||
       !form.designation.trim() ||
-      !form.joiningDate
+      !form.joiningDate ||
+      !form.loginPassword ||
+      !form.confirmPassword
     ) {
       setError("Please fill in all required fields.");
       return;
     }
 
-    // Phone validation
+    // ============================================
+    // PASSWORD VALIDATION
+    // ============================================
+
+    if (form.loginPassword.length < 6) {
+      setError(
+        "Login password must contain at least 6 characters."
+      );
+      return;
+    }
+
+    if (form.loginPassword !== form.confirmPassword) {
+      setError("Login passwords do not match.");
+      return;
+    }
+
+    // ============================================
+    // PHONE VALIDATION
+    // ============================================
+
     if (
       form.phone &&
       !/^[0-9+\-\s()]{7,15}$/.test(form.phone)
@@ -68,7 +97,6 @@ function AddEmployee() {
       return;
     }
 
-    // Emergency phone validation
     if (
       form.emergencyContactPhone &&
       !/^[0-9+\-\s()]{7,15}$/.test(
@@ -81,7 +109,10 @@ function AddEmployee() {
       return;
     }
 
-    // Salary validation
+    // ============================================
+    // SALARY VALIDATION
+    // ============================================
+
     if (
       form.monthlySalary &&
       Number(form.monthlySalary) < 0
@@ -93,11 +124,15 @@ function AddEmployee() {
     setLoading(true);
 
     try {
-      /*
-       * ============================================
-       * CHECK DUPLICATE EMPLOYEE ID
-       * ============================================
-       */
+      const employeeId = form.employeeId.trim();
+
+      const email = form.email
+        .trim()
+        .toLowerCase();
+
+      // ============================================
+      // CHECK DUPLICATE EMPLOYEE ID
+      // ============================================
 
       const {
         data: existingEmployee,
@@ -105,10 +140,7 @@ function AddEmployee() {
       } = await supabase
         .from("employees")
         .select("id")
-        .eq(
-          "employee_id",
-          form.employeeId.trim()
-        )
+        .eq("employee_id", employeeId)
         .maybeSingle();
 
       if (employeeCheckError) {
@@ -121,11 +153,9 @@ function AddEmployee() {
         );
       }
 
-      /*
-       * ============================================
-       * CHECK DUPLICATE EMAIL
-       * ============================================
-       */
+      // ============================================
+      // CHECK DUPLICATE EMAIL
+      // ============================================
 
       const {
         data: existingEmail,
@@ -133,10 +163,7 @@ function AddEmployee() {
       } = await supabase
         .from("employees")
         .select("id")
-        .eq(
-          "email",
-          form.email.trim().toLowerCase()
-        )
+        .eq("email", email)
         .maybeSingle();
 
       if (emailCheckError) {
@@ -149,23 +176,18 @@ function AddEmployee() {
         );
       }
 
-      /*
-       * ============================================
-       * INSERT EMPLOYEE
-       *
-       * IMPORTANT:
-       * These names exactly match your Supabase table.
-       * ============================================
-       */
+      // ============================================
+      // INSERT EMPLOYEE
+      // ============================================
 
       const { error: insertError } = await supabase
         .from("employees")
         .insert({
-          employee_id: form.employeeId.trim(),
+          employee_id: employeeId,
 
           full_name: form.fullName.trim(),
 
-          email: form.email.trim().toLowerCase(),
+          email: email,
 
           phone:
             form.phone.trim() || null,
@@ -201,31 +223,34 @@ function AddEmployee() {
 
           emergency_contact_phone:
             form.emergencyContactPhone.trim() || null,
+
+          // LOGIN PASSWORD
+          login_password:
+            form.loginPassword,
         });
 
       if (insertError) {
         throw insertError;
       }
 
-      /*
-       * ============================================
-       * SUCCESS
-       * ============================================
-       */
+      // ============================================
+      // SUCCESS
+      // ============================================
 
       setMessage(
-        "Employee added successfully."
+        "Employee added successfully. Login credentials created."
       );
 
-      /*
-       * Clear form
-       */
+      // ============================================
+      // CLEAR FORM
+      // ============================================
 
       setForm({
         employeeId: "",
         fullName: "",
         email: "",
         phone: "",
+
         department: "",
         designation: "",
         joiningDate: "",
@@ -233,18 +258,23 @@ function AddEmployee() {
         monthlySalary: "",
         reportingManager: "",
         employmentStatus: "Active",
+
         address: "",
         emergencyContactName: "",
         emergencyContactPhone: "",
+
+        loginPassword: "",
+        confirmPassword: "",
       });
 
-      /*
-       * Return to dashboard
-       */
+      // ============================================
+      // RETURN TO ADMIN DASHBOARD
+      // ============================================
 
       setTimeout(() => {
         navigate("/admin-dashboard");
       }, 1200);
+
     } catch (err) {
       console.error(
         "Add employee error:",
@@ -265,7 +295,7 @@ function AddEmployee() {
 
       <div className="auth-card add-employee-card">
 
-        {/* Back */}
+        {/* BACK */}
 
         <button
           type="button"
@@ -278,7 +308,7 @@ function AddEmployee() {
           ← Back to Dashboard
         </button>
 
-        {/* Header */}
+        {/* HEADER */}
 
         <div className="auth-header">
 
@@ -287,13 +317,13 @@ function AddEmployee() {
           <p>Add Employee</p>
 
           <span>
-            Create a new employee record and add
-            them to your organization.
+            Create a new employee record and
+            login credentials.
           </span>
 
         </div>
 
-        {/* Error */}
+        {/* ERROR */}
 
         {error && (
           <div className="error-message">
@@ -301,7 +331,7 @@ function AddEmployee() {
           </div>
         )}
 
-        {/* Success */}
+        {/* SUCCESS */}
 
         {message && (
           <div className="success-message">
@@ -330,7 +360,7 @@ function AddEmployee() {
 
           <div className="form-grid">
 
-            {/* Employee ID */}
+            {/* EMPLOYEE ID */}
 
             <div className="form-group">
 
@@ -350,7 +380,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Full Name */}
+            {/* FULL NAME */}
 
             <div className="form-group">
 
@@ -371,7 +401,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Email */}
+            {/* EMAIL */}
 
             <div className="form-group">
 
@@ -392,7 +422,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Phone */}
+            {/* PHONE */}
 
             <div className="form-group">
 
@@ -415,14 +445,96 @@ function AddEmployee() {
           </div>
 
           {/* =========================================
+              LOGIN CREDENTIALS
+          ========================================= */}
+
+          <div className="form-section-title">
+
+            <h3>Login Credentials</h3>
+
+            <span>
+              Employee will use these credentials
+              to access their dashboard.
+            </span>
+
+          </div>
+
+          <div className="form-grid">
+
+            {/* LOGIN EMAIL */}
+
+            <div className="form-group">
+
+              <label>
+                Login Email
+              </label>
+
+              <input
+                type="email"
+                value={form.email}
+                readOnly
+              />
+
+              <small>
+                The employee's official email is
+                used for login.
+              </small>
+
+            </div>
+
+            {/* PASSWORD */}
+
+            <div className="form-group">
+
+              <label htmlFor="loginPassword">
+                Login Password *
+              </label>
+
+              <input
+                id="loginPassword"
+                name="loginPassword"
+                type="password"
+                placeholder="Enter login password"
+                value={form.loginPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+                minLength="6"
+                required
+              />
+
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+
+            <div className="form-group">
+
+              <label htmlFor="confirmPassword">
+                Confirm Password *
+              </label>
+
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm login password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+                minLength="6"
+                required
+              />
+
+            </div>
+
+          </div>
+
+          {/* =========================================
               EMPLOYMENT INFORMATION
           ========================================= */}
 
           <div className="form-section-title">
 
-            <h3>
-              Employment Information
-            </h3>
+            <h3>Employment Information</h3>
 
             <span>
               Role and organization details
@@ -432,7 +544,7 @@ function AddEmployee() {
 
           <div className="form-grid">
 
-            {/* Department */}
+            {/* DEPARTMENT */}
 
             <div className="form-group">
 
@@ -492,7 +604,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Designation */}
+            {/* DESIGNATION */}
 
             <div className="form-group">
 
@@ -512,7 +624,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Joining Date */}
+            {/* JOINING DATE */}
 
             <div className="form-group">
 
@@ -531,7 +643,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Employment Type */}
+            {/* EMPLOYMENT TYPE */}
 
             <div className="form-group">
 
@@ -566,7 +678,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Monthly Salary */}
+            {/* SALARY */}
 
             <div className="form-group">
 
@@ -587,7 +699,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Reporting Manager */}
+            {/* REPORTING MANAGER */}
 
             <div className="form-group">
 
@@ -606,7 +718,7 @@ function AddEmployee() {
 
             </div>
 
-            {/* Employment Status */}
+            {/* EMPLOYMENT STATUS */}
 
             <div className="form-group">
 
@@ -649,9 +761,7 @@ function AddEmployee() {
 
           <div className="form-section-title">
 
-            <h3>
-              Contact Information
-            </h3>
+            <h3>Contact Information</h3>
 
             <span>
               Additional employee details
@@ -659,7 +769,7 @@ function AddEmployee() {
 
           </div>
 
-          {/* Address */}
+          {/* ADDRESS */}
 
           <div className="form-group">
 
@@ -678,7 +788,7 @@ function AddEmployee() {
 
           </div>
 
-          {/* Emergency Contact */}
+          {/* EMERGENCY CONTACT */}
 
           <div className="form-grid">
 
@@ -741,7 +851,7 @@ function AddEmployee() {
               disabled={loading}
             >
               {loading
-                ? "Adding Employee..."
+                ? "Creating Employee..."
                 : "Add Employee"}
             </button>
 
