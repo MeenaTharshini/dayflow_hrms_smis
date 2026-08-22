@@ -1,69 +1,116 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// Pages
+// =====================================================
+// PAGES
+// =====================================================
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import AdminLogin from "./pages/Adminlogin";
 
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import Profile from "./pages/Profile";
-import Leave from "./pages/Leave";
-import Payroll from "./pages/Payroll";
+import AddEmployee from "./pages/AddEmployee";
+
+
+// =====================================================
+// APP
+// =====================================================
 
 function App() {
   return (
     <BrowserRouter>
+
       <Routes>
 
-        {/* ================= PUBLIC ROUTES ================= */}
-
-        <Route path="/" element={<Landing />} />
-
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/signup" element={<Signup />} />
-
-
-        {/* ================= EMPLOYEE ROUTES ================= */}
+        {/* =================================================
+            LANDING
+        ================================================= */}
 
         <Route
-          path="/employee/dashboard"
+          path="/"
+          element={<Landing />}
+        />
+
+
+        {/* =================================================
+            EMPLOYEE AUTHENTICATION
+        ================================================= */}
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+
+        {/* =================================================
+            ADMIN REGISTRATION
+        ================================================= */}
+
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+
+
+        {/* =================================================
+            ADMIN LOGIN
+        ================================================= */}
+
+        <Route
+          path="/admin-login"
+          element={<AdminLogin />}
+        />
+
+
+        {/* =================================================
+            EMPLOYEE DASHBOARD
+        ================================================= */}
+
+        <Route
+          path="/employee-dashboard"
           element={<EmployeeDashboard />}
         />
 
-        <Route
-          path="/employee/profile"
-          element={<Profile />}
-        />
+
+        {/* =================================================
+            ADMIN DASHBOARD
+        ================================================= */}
 
         <Route
-          path="/employee/leave"
-          element={<Leave />}
-        />
-
-        <Route
-          path="/employee/payroll"
-          element={<Payroll />}
-        />
-
-
-        {/* ================= ADMIN / HR ROUTES ================= */}
-
-        <Route
-          path="/admin/dashboard"
+          path="/admin-dashboard"
           element={<AdminDashboard />}
         />
 
 
-        {/* ================= FALLBACK ================= */}
+        {/* =================================================
+            ADD EMPLOYEE
+        ================================================= */}
+
+        <Route
+          path="/add-employee"
+          element={<AddEmployee />}
+        />
+
+
+        {/* =================================================
+            FALLBACK
+        ================================================= */}
 
         <Route
           path="*"
-          element={<Navigate to="/" replace />}
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
         />
 
       </Routes>
+
     </BrowserRouter>
   );
 }

@@ -4,111 +4,271 @@ import "./Landing.css";
 function Landing() {
   const navigate = useNavigate();
 
+  const goToEmployeeLogin = () => {
+    navigate("/login");
+  };
+
+  const goToAdminRegistration = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="landing-page">
-      {/* Navigation */}
+
+      {/* =====================================================
+          NAVIGATION
+      ===================================================== */}
+
       <nav className="landing-navbar">
-        <div className="brand">
-          <span className="brand-name">DaYFlow</span>
-        </div>
 
+        {/* Brand */}
+        <button
+          type="button"
+          className="brand-name"
+          onClick={() => navigate("/")}
+          aria-label="Go to DaYFlow home"
+        >
+          DaYFlow
+        </button>
+
+        {/* Navigation actions */}
         <div className="nav-actions">
+
           <button
+            type="button"
             className="nav-login"
-            onClick={() => navigate("/login")}
+            onClick={goToEmployeeLogin}
           >
-            Login
+            Employee Login
           </button>
 
           <button
-            className="nav-signup"
-            onClick={() => navigate("/signup")}
+            type="button"
+            className="nav-admin"
+            onClick={goToAdminRegistration}
           >
-            Sign Up
+            Admin Registration
           </button>
+
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="hero-section">
-        <div className="hero-content">
-          <p className="hero-label">HUMAN RESOURCE MANAGEMENT SYSTEM</p>
 
-          <h1>
-            Every workday,
-            <br />
-            <span>perfectly aligned.</span>
-          </h1>
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
-          <p className="hero-description">
-            DaYFlow brings employees, attendance, leave management,
-            approvals, and payroll together in one simple platform.
-          </p>
+      <main className="landing-main">
 
-          <div className="hero-buttons">
-            <button
-              className="primary-button"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+        {/* ===================================================
+            HERO
+        =================================================== */}
 
-            <button
-              className="secondary-button"
-              onClick={() => navigate("/signup")}
-            >
-              Request Access
-            </button>
+        <section className="hero-section">
+
+          <div className="hero-content">
+
+            <p className="hero-label">
+              HUMAN RESOURCE MANAGEMENT SYSTEM
+            </p>
+
+            <h1>
+              Every workday,
+              <br />
+              <span>perfectly aligned.</span>
+            </h1>
+
+            <p className="hero-description">
+              DaYFlow brings employees and administrators together
+              through a secure, simple platform for attendance,
+              leave, payroll, approvals, and workforce management.
+            </p>
+
           </div>
-        </div>
 
-        {/* Right-side visual */}
-        <div className="hero-visual">
-          <div className="dashboard-card">
-            <div className="card-header">
-              <div>
-                <p className="small-text">Welcome to</p>
-                <h2>DaYFlow</h2>
+
+          {/* =================================================
+              ACCESS CARDS
+          ================================================= */}
+
+          <div className="role-selection">
+
+            {/* =================================================
+                EMPLOYEE CARD
+            ================================================= */}
+
+            <article className="role-card employee-card">
+
+              <div className="role-icon employee-icon">
+                <span aria-hidden="true">◉</span>
               </div>
 
-              <div className="status-dot"></div>
-            </div>
+              <div className="role-content">
 
-            <div className="dashboard-stats">
-              <div className="stat-card">
-                <span>Attendance</span>
-                <strong>Present</strong>
+                <span className="role-label">
+                  EMPLOYEE ACCESS
+                </span>
+
+                <h2>
+                  Employee
+                </h2>
+
+                <p>
+                  Sign in to access your attendance, leave requests,
+                  payroll, profile, and workplace services.
+                </p>
+
               </div>
 
-              <div className="stat-card">
-                <span>Leave</span>
-                <strong>0 Days</strong>
+              <button
+                type="button"
+                className="role-button employee-button"
+                onClick={goToEmployeeLogin}
+              >
+                <span>
+                  Employee Login
+                </span>
+
+                <span aria-hidden="true">
+                  →
+                </span>
+              </button>
+
+            </article>
+
+
+            {/* =================================================
+                ADMIN CARD
+            ================================================= */}
+
+            <article className="role-card admin-card">
+
+              <div className="role-icon admin-icon">
+                <span aria-hidden="true">◆</span>
               </div>
 
-              <div className="stat-card">
-                <span>Requests</span>
-                <strong>2 Pending</strong>
-              </div>
-            </div>
+              <div className="role-content">
 
-            <div className="progress-section">
-              <div className="progress-label">
-                <span>Workday Progress</span>
-                <span>75%</span>
+                <span className="role-label">
+                  ADMINISTRATOR ACCESS
+                </span>
+
+                <h2>
+                  Administrator
+                </h2>
+
+                <p>
+                  Create an administrator account to manage
+                  employees, attendance, leave, payroll,
+                  approvals, and HR operations.
+                </p>
+
               </div>
 
-              <div className="progress-bar">
-                <div className="progress-fill"></div>
-              </div>
-            </div>
+              <button
+                type="button"
+                className="role-button admin-button"
+                onClick={goToAdminRegistration}
+              >
+                <span>
+                  Admin Registration
+                </span>
+
+                <span aria-hidden="true">
+                  →
+                </span>
+              </button>
+
+            </article>
+
           </div>
-        </div>
+
+        </section>
+
+
+        {/* ===================================================
+            INFORMATION STRIP
+        =================================================== */}
+
+        <section className="landing-features">
+
+          <div className="feature-item">
+
+            <span className="feature-icon">
+              ✓
+            </span>
+
+            <div>
+              <strong>
+                Secure Access
+              </strong>
+
+              <p>
+                Role-based authentication
+              </p>
+            </div>
+
+          </div>
+
+
+          <div className="feature-item">
+
+            <span className="feature-icon">
+              ◷
+            </span>
+
+            <div>
+              <strong>
+                Attendance
+              </strong>
+
+              <p>
+                Simple workforce tracking
+              </p>
+            </div>
+
+          </div>
+
+
+          <div className="feature-item">
+
+            <span className="feature-icon">
+              ◆
+            </span>
+
+            <div>
+              <strong>
+                HR Management
+              </strong>
+
+              <p>
+                Leave and payroll management
+              </p>
+            </div>
+
+          </div>
+
+        </section>
+
       </main>
 
-      {/* Footer */}
+
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
+
       <footer className="landing-footer">
-        <p>© 2026 DaYFlow. All rights reserved.</p>
+
+        <p>
+          © 2026 DaYFlow. All rights reserved.
+        </p>
+
+        <span>
+          Secure • Simple • Connected
+        </span>
+
       </footer>
+
     </div>
   );
 }
