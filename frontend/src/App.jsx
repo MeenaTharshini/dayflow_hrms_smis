@@ -1,8 +1,12 @@
-
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // =====================================================
-// PAGES
+// PUBLIC PAGES
 // =====================================================
 
 import Landing from "./pages/Landing";
@@ -10,10 +14,23 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AdminLogin from "./pages/Adminlogin";
 
+// =====================================================
+// EMPLOYEE PAGES
+// =====================================================
+
 import EmployeeDashboard from "./pages/EmployeeDashboard";
+import Profile from "./pages/Profile";
+import Attendance from "./pages/Attendance";
+import Leave from "./pages/Leave";
+import Payroll from "./pages/Payroll";
+
+// =====================================================
+// ADMIN PAGES
+// =====================================================
+
 import AdminDashboard from "./pages/AdminDashboard";
 import AddEmployee from "./pages/AddEmployee";
-
+import AdminPayroll from "./pages/AdminPayroll";
 
 // =====================================================
 // APP
@@ -22,11 +39,10 @@ import AddEmployee from "./pages/AddEmployee";
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
         {/* =================================================
-            LANDING
+            PUBLIC / LANDING
         ================================================= */}
 
         <Route
@@ -34,9 +50,8 @@ function App() {
           element={<Landing />}
         />
 
-
         {/* =================================================
-            EMPLOYEE AUTHENTICATION
+            EMPLOYEE LOGIN
         ================================================= */}
 
         <Route
@@ -44,16 +59,14 @@ function App() {
           element={<Login />}
         />
 
-
         {/* =================================================
-            ADMIN REGISTRATION
+            SIGNUP
         ================================================= */}
 
         <Route
           path="/signup"
           element={<Signup />}
         />
-
 
         {/* =================================================
             ADMIN LOGIN
@@ -64,7 +77,6 @@ function App() {
           element={<AdminLogin />}
         />
 
-
         {/* =================================================
             EMPLOYEE DASHBOARD
         ================================================= */}
@@ -74,6 +86,41 @@ function App() {
           element={<EmployeeDashboard />}
         />
 
+        {/* =================================================
+            EMPLOYEE PROFILE
+        ================================================= */}
+
+        <Route
+          path="/employee/profile"
+          element={<Profile />}
+        />
+
+        {/* =================================================
+            EMPLOYEE ATTENDANCE
+        ================================================= */}
+
+        <Route
+          path="/employee/attendance"
+          element={<Attendance />}
+        />
+
+        {/* =================================================
+            EMPLOYEE LEAVE
+        ================================================= */}
+
+        <Route
+          path="/employee/leave"
+          element={<Leave />}
+        />
+
+        {/* =================================================
+            EMPLOYEE PAYROLL
+        ================================================= */}
+
+        <Route
+          path="/employee/payroll"
+          element={<Payroll />}
+        />
 
         {/* =================================================
             ADMIN DASHBOARD
@@ -84,7 +131,6 @@ function App() {
           element={<AdminDashboard />}
         />
 
-
         {/* =================================================
             ADD EMPLOYEE
         ================================================= */}
@@ -94,6 +140,14 @@ function App() {
           element={<AddEmployee />}
         />
 
+        {/* =================================================
+            ADMIN PAYROLL
+        ================================================= */}
+
+        <Route
+          path="/admin/payroll"
+          element={<AdminPayroll />}
+        />
 
         {/* =================================================
             FALLBACK
@@ -110,7 +164,6 @@ function App() {
         />
 
       </Routes>
-
     </BrowserRouter>
   );
 }

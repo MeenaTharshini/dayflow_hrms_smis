@@ -1,0 +1,1607 @@
+/* =========================================================
+   DAYFLOW HRMS
+   EMPLOYEE PAYROLL
+   PRODUCT LEVEL UI
+   ========================================================= */
+
+:root {
+  --pay-primary: #2563eb;
+  --pay-primary-dark: #1d4ed8;
+  --pay-primary-soft: #eff6ff;
+
+  --pay-success: #16a34a;
+  --pay-success-soft: #f0fdf4;
+
+  --pay-warning: #d97706;
+  --pay-warning-soft: #fffbeb;
+
+  --pay-danger: #dc2626;
+  --pay-danger-soft: #fef2f2;
+
+  --pay-text: #0f172a;
+  --pay-secondary: #475569;
+  --pay-muted: #64748b;
+  --pay-light: #94a3b8;
+
+  --pay-border: #e2e8f0;
+  --pay-bg: #f6f8fb;
+  --pay-white: #ffffff;
+
+  --pay-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.payroll-page {
+  min-height: 100vh;
+
+  background:
+    var(--pay-bg);
+
+  color:
+    var(--pay-text);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:
+    antialiased;
+}
+
+.payroll-page button {
+  font: inherit;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.payroll-loading {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  background:
+    var(--pay-bg);
+
+  color:
+    var(--pay-muted);
+}
+
+.payroll-spinner {
+  width: 38px;
+  height: 38px;
+
+  border:
+    3px solid #dbe4ef;
+
+  border-top-color:
+    var(--pay-primary);
+
+  border-radius: 50%;
+
+  animation:
+    payroll-spin 0.75s linear infinite;
+}
+
+@keyframes payroll-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.payroll-loading p {
+  margin: 0;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.payroll-navbar {
+  min-height: 72px;
+
+  padding:
+    0 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background:
+    white;
+
+  border-bottom:
+    1px solid var(--pay-border);
+}
+
+.payroll-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.payroll-brand button {
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--pay-text);
+
+  font-size: 21px;
+  font-weight: 800;
+
+  letter-spacing: -0.7px;
+
+  cursor: pointer;
+}
+
+.payroll-brand span {
+  color:
+    var(--pay-primary);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.payroll-nav-right {
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+}
+
+.payroll-user {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.payroll-avatar {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background:
+    var(--pay-primary-soft);
+
+  color:
+    var(--pay-primary);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.payroll-user > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.payroll-user strong {
+  font-size: 11px;
+}
+
+.payroll-user span {
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+}
+
+.payroll-logout {
+  padding:
+    7px 11px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 7px;
+
+  background:
+    white;
+
+  color:
+    var(--pay-secondary);
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.payroll-logout:hover {
+  color:
+    var(--pay-danger);
+
+  border-color:
+    #fecaca;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.payroll-main {
+  width: 100%;
+  max-width: 1240px;
+
+  margin:
+    0 auto;
+
+  padding:
+    28px 40px 50px;
+}
+
+
+/* =========================================================
+   BACK
+   ========================================================= */
+
+.payroll-back {
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.payroll-back:hover {
+  color:
+    var(--pay-primary);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.payroll-page-header {
+  margin-top: 25px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.payroll-page-header > div:first-child > span {
+  color:
+    var(--pay-primary);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+}
+
+.payroll-page-header h1 {
+  margin:
+    6px 0 5px;
+
+  font-size: 29px;
+  font-weight: 800;
+
+  letter-spacing: -0.9px;
+}
+
+.payroll-page-header p {
+  margin: 0;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 11px;
+}
+
+.payroll-live-indicator {
+  padding:
+    8px 11px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  border:
+    1px solid #bbf7d0;
+
+  border-radius: 20px;
+
+  background:
+    var(--pay-success-soft);
+
+  color:
+    var(--pay-success);
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.payroll-live-indicator span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    var(--pay-success);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(22, 163, 74, 0.1);
+
+  animation:
+    live-pulse 1.8s infinite;
+}
+
+@keyframes live-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+
+/* =========================================================
+   PAYMENT HERO
+   ========================================================= */
+
+.payment-status-hero {
+  margin-top: 25px;
+
+  min-height: 175px;
+
+  padding:
+    28px 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 17px;
+
+  border:
+    1px solid transparent;
+
+  box-shadow:
+    0 8px 25px
+    rgba(15, 23, 42, 0.08);
+}
+
+.payment-status-hero.status-processing {
+  background:
+    linear-gradient(
+      135deg,
+      #fffaf0,
+      #fffbeb
+    );
+
+  border-color:
+    #fde68a;
+}
+
+.payment-status-hero.status-paid {
+  background:
+    linear-gradient(
+      135deg,
+      #f0fdf4,
+      #ecfdf5
+    );
+
+  border-color:
+    #bbf7d0;
+}
+
+.payment-status-hero.status-pending {
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #f1f5f9
+    );
+
+  border-color:
+    var(--pay-border);
+}
+
+.payment-status-hero.status-failed {
+  background:
+    linear-gradient(
+      135deg,
+      #fff5f5,
+      #fef2f2
+    );
+
+  border-color:
+    #fecaca;
+}
+
+.payment-status-left {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+}
+
+.payment-status-icon {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.8);
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.status-processing
+.payment-status-icon {
+  color:
+    var(--pay-warning);
+}
+
+.status-paid
+.payment-status-icon {
+  color:
+    var(--pay-success);
+}
+
+.status-failed
+.payment-status-icon {
+  color:
+    var(--pay-danger);
+}
+
+.payment-label {
+  color:
+    var(--pay-muted);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.payment-status-left h2 {
+  margin:
+    5px 0 4px;
+
+  font-size: 21px;
+  font-weight: 800;
+
+  letter-spacing: -0.4px;
+}
+
+.payment-status-left p {
+  margin: 0;
+
+  color:
+    var(--pay-secondary);
+
+  font-size: 10px;
+}
+
+.payment-amount {
+  min-width: 205px;
+
+  padding-left: 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  border-left:
+    1px solid
+    rgba(15, 23, 42, 0.09);
+}
+
+.payment-amount > span {
+  color:
+    var(--pay-muted);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.payment-amount strong {
+  margin:
+    5px 0;
+
+  font-size: 30px;
+  font-weight: 850;
+
+  letter-spacing: -1px;
+}
+
+.payment-amount small {
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   LIVE BAR
+   ========================================================= */
+
+.payment-live-bar {
+  min-height: 42px;
+
+  margin-top: 10px;
+
+  padding:
+    0 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 9px;
+
+  background:
+    white;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+}
+
+.payment-live-bar > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.payment-live-bar strong {
+  color:
+    var(--pay-secondary);
+
+  font-size: 9px;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    var(--pay-success);
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.payroll-section {
+  margin-top: 34px;
+}
+
+.section-title {
+  margin-bottom: 15px;
+}
+
+.section-title span {
+  color:
+    var(--pay-primary);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+}
+
+.section-title h2 {
+  margin:
+    4px 0 0;
+
+  font-size: 17px;
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+.payment-timeline {
+  padding:
+    23px;
+
+  display: flex;
+  align-items: flex-start;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 14px;
+
+  box-shadow:
+    var(--pay-shadow);
+}
+
+.timeline-step {
+  flex: 1;
+
+  display: flex;
+  gap: 10px;
+}
+
+.timeline-icon {
+  width: 29px;
+  height: 29px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    #f1f5f9;
+
+  color:
+    var(--pay-light);
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.timeline-step.completed
+.timeline-icon {
+  background:
+    var(--pay-success-soft);
+
+  color:
+    var(--pay-success);
+}
+
+.timeline-step.current
+.timeline-icon {
+  background:
+    var(--pay-warning-soft);
+
+  color:
+    var(--pay-warning);
+}
+
+.timeline-step > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.timeline-step strong {
+  font-size: 10px;
+}
+
+.timeline-step span {
+  max-width: 190px;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 8px;
+
+  line-height: 1.5;
+}
+
+.timeline-line {
+  width: 55px;
+
+  height: 1px;
+
+  margin:
+    14px 12px 0;
+
+  background:
+    #e2e8f0;
+}
+
+.timeline-line.active {
+  background:
+    #86efac;
+}
+
+
+/* =========================================================
+   SALARY SUMMARY
+   ========================================================= */
+
+.salary-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 13px;
+}
+
+.salary-summary-card {
+  padding:
+    20px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 13px;
+
+  box-shadow:
+    var(--pay-shadow);
+}
+
+.salary-summary-card span {
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.salary-summary-card strong {
+  display: block;
+
+  margin:
+    9px 0 5px;
+
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.salary-summary-card small {
+  color:
+    var(--pay-light);
+
+  font-size: 9px;
+}
+
+.deduction-card strong {
+  color:
+    var(--pay-danger);
+}
+
+.net-card {
+  border-color:
+    #bfdbfe;
+}
+
+.net-card strong {
+  color:
+    var(--pay-primary);
+}
+
+
+/* =========================================================
+   SALARY BREAKDOWN
+   ========================================================= */
+
+.salary-breakdown-card {
+  padding:
+    4px 20px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 13px;
+
+  box-shadow:
+    var(--pay-shadow);
+}
+
+.salary-row {
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom:
+    1px solid #f1f5f9;
+}
+
+.salary-row:last-child {
+  border-bottom: 0;
+}
+
+.salary-row span {
+  color:
+    var(--pay-secondary);
+
+  font-size: 10px;
+}
+
+.salary-row strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.salary-row.total-row {
+  min-height: 57px;
+}
+
+.salary-row.total-row span,
+.salary-row.total-row strong {
+  color:
+    var(--pay-text);
+
+  font-weight: 800;
+}
+
+.deduction-value {
+  color:
+    var(--pay-danger);
+}
+
+
+/* =========================================================
+   TRANSACTION
+   ========================================================= */
+
+.transaction-card {
+  padding:
+    20px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 1.5fr;
+
+  gap: 20px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 13px;
+
+  box-shadow:
+    var(--pay-shadow);
+}
+
+.transaction-card > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.transaction-card span {
+  color:
+    var(--pay-light);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+.transaction-card strong {
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.transaction-card .status-paid {
+  color:
+    var(--pay-success);
+}
+
+.transaction-card .status-processing {
+  color:
+    var(--pay-warning);
+}
+
+.transaction-card .status-pending {
+  color:
+    var(--pay-muted);
+}
+
+
+/* =========================================================
+   PAYSLIP
+   ========================================================= */
+
+.payslip-card {
+  margin-top: 34px;
+
+  padding:
+    19px 21px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  background:
+    #f8fbff;
+
+  border:
+    1px solid #dbeafe;
+
+  border-radius: 13px;
+}
+
+.payslip-icon {
+  width: 42px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid #bfdbfe;
+
+  border-radius: 7px;
+
+  background:
+    white;
+
+  color:
+    var(--pay-danger);
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.payslip-card > div:nth-child(2) {
+  flex: 1;
+}
+
+.payslip-card span {
+  color:
+    var(--pay-primary);
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+.payslip-card h3 {
+  margin:
+    4px 0;
+
+  font-size: 12px;
+}
+
+.payslip-card p {
+  margin: 0;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+}
+
+.payslip-card button {
+  height: 37px;
+
+  padding:
+    0 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  border:
+    1px solid #bfdbfe;
+
+  border-radius: 8px;
+
+  background:
+    white;
+
+  color:
+    var(--pay-primary);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.payslip-card button:hover {
+  background:
+    var(--pay-primary);
+
+  border-color:
+    var(--pay-primary);
+
+  color:
+    white;
+}
+
+.payslip-card button:disabled {
+  opacity: 0.6;
+
+  cursor: wait;
+}
+
+
+/* =========================================================
+   HISTORY
+   ========================================================= */
+
+.payroll-history {
+  overflow: hidden;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 13px;
+
+  box-shadow:
+    var(--pay-shadow);
+}
+
+.history-row {
+  min-height: 70px;
+
+  padding:
+    12px 17px;
+
+  display: grid;
+
+  grid-template-columns:
+    2fr
+    1fr
+    1fr
+    1fr
+    auto;
+
+  align-items: center;
+
+  gap: 15px;
+
+  border-bottom:
+    1px solid #f1f5f9;
+}
+
+.history-row:last-child {
+  border-bottom: 0;
+}
+
+.history-month {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.history-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    var(--pay-primary-soft);
+
+  color:
+    var(--pay-primary);
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.history-month > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.history-month strong {
+  font-size: 10px;
+}
+
+.history-month span {
+  color:
+    var(--pay-light);
+
+  font-size: 8px;
+}
+
+.history-value,
+.history-net {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.history-value span,
+.history-net span {
+  color:
+    var(--pay-light);
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+.history-value strong {
+  color:
+    var(--pay-secondary);
+
+  font-size: 9px;
+}
+
+.history-net strong {
+  color:
+    var(--pay-primary);
+
+  font-size: 10px;
+}
+
+.history-status {
+  padding:
+    5px 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  border-radius: 20px;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.history-status span {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+}
+
+.history-status.paid {
+  background:
+    var(--pay-success-soft);
+
+  color:
+    var(--pay-success);
+}
+
+.history-status.paid span {
+  background:
+    var(--pay-success);
+}
+
+.history-status.processing {
+  background:
+    var(--pay-warning-soft);
+
+  color:
+    var(--pay-warning);
+}
+
+.history-status.processing span {
+  background:
+    var(--pay-warning);
+}
+
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+.payroll-security {
+  margin-top: 30px;
+
+  padding:
+    17px;
+
+  display: flex;
+
+  gap: 12px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--pay-border);
+
+  border-radius: 11px;
+}
+
+.payroll-security > div {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background:
+    #f1f5f9;
+
+  font-size: 13px;
+}
+
+.payroll-security strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 10px;
+}
+
+.payroll-security p {
+  margin: 0;
+
+  color:
+    var(--pay-muted);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.payroll-footer {
+  padding:
+    22px 46px;
+
+  display: flex;
+  justify-content: space-between;
+
+  border-top:
+    1px solid var(--pay-border);
+
+  background:
+    white;
+
+  color:
+    var(--pay-light);
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .payroll-navbar {
+    padding:
+      0 25px;
+  }
+
+  .payroll-main {
+    padding:
+      25px 25px 40px;
+  }
+
+  .payment-status-hero {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 25px;
+  }
+
+  .payment-amount {
+    width: 100%;
+
+    padding:
+      17px 0 0;
+
+    align-items: flex-start;
+
+    border-left: 0;
+
+    border-top:
+      1px solid
+      rgba(15, 23, 42, 0.1);
+  }
+
+  .salary-summary-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .transaction-card {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .transaction-card > div:last-child {
+    grid-column:
+      1 / -1;
+  }
+
+  .history-row {
+    grid-template-columns:
+      2fr 1fr 1fr;
+
+    padding:
+      15px;
+  }
+
+  .history-status {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .payroll-navbar {
+    min-height: 64px;
+
+    padding:
+      0 15px;
+  }
+
+  .payroll-user {
+    display: none;
+  }
+
+  .payroll-nav-right {
+    gap: 0;
+  }
+
+  .payroll-logout span {
+    display: none;
+  }
+
+  .payroll-main {
+    padding:
+      20px 14px 35px;
+  }
+
+  .payroll-page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 14px;
+  }
+
+  .payroll-page-header h1 {
+    font-size: 24px;
+  }
+
+  .payment-status-hero {
+    padding:
+      22px;
+  }
+
+  .payment-status-left {
+    align-items: flex-start;
+  }
+
+  .payment-status-left h2 {
+    font-size: 18px;
+  }
+
+  .payment-amount strong {
+    font-size: 27px;
+  }
+
+  .payment-live-bar {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding:
+      9px 12px;
+  }
+
+  .payment-timeline {
+    padding:
+      18px;
+
+    flex-direction: column;
+  }
+
+  .timeline-step {
+    width: 100%;
+  }
+
+  .timeline-line {
+    width: 1px;
+
+    height: 25px;
+
+    margin:
+      4px 0 4px 14px;
+  }
+
+  .transaction-card {
+    grid-template-columns:
+      1fr;
+  }
+
+  .transaction-card > div:last-child {
+    grid-column:
+      auto;
+  }
+
+  .payslip-card {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .payslip-card > div:nth-child(2) {
+    min-width:
+      calc(100% - 60px);
+  }
+
+  .payslip-card button {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .history-row {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 13px;
+  }
+
+  .history-month {
+    grid-column:
+      1 / -1;
+  }
+
+  .history-value:nth-child(3) {
+    display: none;
+  }
+
+  .history-net {
+    align-items: flex-end;
+  }
+
+  .payroll-footer {
+    padding:
+      20px 15px;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .payment-status-hero {
+    padding:
+      18px;
+  }
+
+  .payment-status-icon {
+    width: 43px;
+    height: 43px;
+  }
+
+  .payment-status-left {
+    gap: 11px;
+  }
+
+  .payment-status-left h2 {
+    font-size: 16px;
+  }
+
+  .salary-breakdown-card {
+    padding:
+      3px 14px;
+  }
+
+  .history-row {
+    padding:
+      12px;
+    }
+}
